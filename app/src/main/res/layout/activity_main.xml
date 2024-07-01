@@ -21,25 +21,25 @@
             android:textAlignment="center"
             />
         <Button
+            android:id="@+id/start_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Start Service"/>
         <Button
+            android:id="@+id/stop_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Stop Service"/>
         <Button
+            android:id="@+id/bind_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Bind Service"/>
         <Button
+            android:id="@+id/unbind_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Unbind Service"/>
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Get Random Number"/>
     </LinearLayout>
 
 </RelativeLayout>
