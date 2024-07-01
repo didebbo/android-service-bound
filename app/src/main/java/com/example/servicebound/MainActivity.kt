@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
                 true -> appService?.randomNumber?.observe(this) {
                     bindingView.previewTextView.text = it.toString()
                 }
-                false -> bindingView.previewTextView.text = "Service Not Found"
+                false -> bindingView.previewTextView.text = "Unbound Service"
             }
         }
     }
