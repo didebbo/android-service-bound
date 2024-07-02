@@ -12,6 +12,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.example.servicebound.databinding.ActivityMainBinding
+import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
 
@@ -35,6 +36,8 @@ class MainActivity : AppCompatActivity() {
                 val binder = service as AppService.AppServiceBinder
                 appService = binder.getService()
                 _isAppServiceBound.postValue(true)
+                println("[GN] Bind AppService from Thread ${Thread.currentThread().id}")
+                appService?.pushMessageLog("Bind AppService from Thread ${Thread.currentThread().id}")
             }
 
             override fun onServiceDisconnected(name: ComponentName?) {
@@ -43,7 +46,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        updateTextPreview()
+        bindAppServiceObservable()
 
         bindingView.startButton.setOnClickListener {
             startAppService()
@@ -64,14 +67,11 @@ class MainActivity : AppCompatActivity() {
         unbindAppService()
     }
 
-    private fun updateTextPreview() {
+    private fun bindAppServiceObservable() {
         isAppServiceBound.observe(this) { isAppServiceBound ->
-            println("[GN] updateTextPreview isAppServiceBound $isAppServiceBound")
             when(isAppServiceBound) {
-                true -> appService?.randomNumber?.observe(this) {
-                    bindingView.previewTextView.text = it.toString()
-                }
-                false -> bindingView.previewTextView.text = "Unbound Service"
+                true -> createAppServiceObservables()
+                false -> bindingView.previewTextView.text = "Unbound AppService"
             }
         }
     }
@@ -84,18 +84,31 @@ class MainActivity : AppCompatActivity() {
     }
     private fun bindAppService() {
         if(isAppServiceBound.value == false) {
-            println("[GN] bindAppService")
             bindService(appServiceIntent, appServiceConnection,Context.BIND_AUTO_CREATE)
         }
     }
 
     private fun unbindAppService() {
         if(isAppServiceBound.value == true) {
-            println("[GN] unbindAppService")
-            appService?.randomNumber?.removeObservers(this)
+            appService?.pushMessageLog("Unbind AppService")
+            removeAppServiceObservables()
             unbindService(appServiceConnection)
-            _isAppServiceBound.postValue(false)
             appService = null
+            _isAppServiceBound.postValue(false)
         }
+    }
+
+    private fun createAppServiceObservables() {
+        appService?.randomNumber?.observe(this) {
+            bindingView.previewTextView.text = it.toString()
+        }
+        appService?.messageLog?.observe(this) {
+            Snackbar.make(bindingView.root,it,Snackbar.LENGTH_SHORT).show()
+        }
+    }
+
+    private  fun  removeAppServiceObservables() {
+        appService?.randomNumber?.removeObservers(this)
+        appService?.messageLog?.removeObservers(this)
     }
 }
