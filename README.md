@@ -1,5 +1,5 @@
 
-Studio di Service Bound in Android Studio con Threads in backGround.
+Studio di Service Bound in Android Studio con Threads in background.
 
 | Android Service Bound                                            |
 |--------------------------------------------|
