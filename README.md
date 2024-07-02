@@ -1,8 +1,7 @@
-# Android Service Bound
 
 Studio di Service Bound in Android Studio con Threads in backGround.
 
-|                                            |
+| Android Service Bound                                            |
 |--------------------------------------------|
 | Unbound Service                            |
 | ![UnBInd Service](/readmefile/unbound.png) |
